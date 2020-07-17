@@ -59,11 +59,11 @@ public:
 	BitArray *allSyncSets;      // union of all synchronisation sets
 	HashTable *literals;        // symbols that are used as literals
 
-	wchar_t* srcName;            // name of the atg file (including path)
-	wchar_t* srcDir;             // directory path of the atg file
-	wchar_t* nsName;             // namespace for generated files
-	wchar_t* frameDir;           // directory containing the frame files
-	wchar_t* outDir;             // directory for generated files
+	char* srcName;            // name of the atg file (including path)
+	char* srcDir;             // directory path of the atg file
+	char* nsName;             // namespace for generated files
+	char* frameDir;           // directory containing the frame files
+	char* outDir;             // directory for generated files
 	bool checkEOF;               // should coco generate a check for EOF at
 	                             // the end of Parser.Parse():
 	bool emitLines;              // emit line directives in generated parser
@@ -98,8 +98,8 @@ public:
 
 	static const char* tKind[];
 
-	Symbol* NewSym(int typ, const wchar_t* name, int line);
-	Symbol* FindSym(const wchar_t* name);
+	Symbol* NewSym(int typ, const char* name, int line);
+	Symbol* FindSym(const char* name);
 	int Num(Node *p);
 	void PrintSym(Symbol *sym);
 	void PrintSymbolTable();
@@ -119,7 +119,7 @@ public:
 	void MakeOption(Graph *g);
 	void Finish(Graph *g);
 	void DeleteNodes();
-	Graph* StrToGraph(const wchar_t* str);
+	Graph* StrToGraph(const char* str);
 	void SetContextTrans(Node *p); // set transition code in the graph rooted at p
 
 	//------------ graph deletability check -----------------
@@ -131,22 +131,22 @@ public:
 	//----------------- graph printing ----------------------
 
 	int Ptr(Node *p, bool up);
-	wchar_t* Pos(Position *pos);
-	wchar_t* Name(const wchar_t* name);
+	char* Pos(Position *pos);
+	char* Name(const char* name);
 	void PrintNodes();
 
 	//---------------------------------------------------------------------
 	//  Character class management
 	//---------------------------------------------------------------------
 
-	CharClass* NewCharClass(const wchar_t* name, CharSet *s);
-	CharClass* FindCharClass(const wchar_t* name);
+	CharClass* NewCharClass(const char* name, CharSet *s);
+	CharClass* FindCharClass(const char* name);
 	CharClass* FindCharClass(CharSet *s);
 	CharSet* CharClassSet(int i);
 
 	//----------- character class printing
 
-	wchar_t* Ch(const wchar_t ch);
+	char* Ch(const char ch);
 	void WriteCharSet(CharSet *s);
 	void WriteCharClasses ();
 
@@ -178,10 +178,10 @@ public:
 	//  String handling
 	//---------------------------------------------------------------------
 
-	wchar_t  Hex2Char(const wchar_t* s);
-	wchar_t* Char2Hex(const wchar_t ch);
-	wchar_t* Unescape(const wchar_t* s);
-	wchar_t* Escape(const wchar_t* s);
+	char  Hex2Char(const char* s);
+	char* Char2Hex(const char ch);
+	char* Unescape(const char* s);
+	char* Escape(const char* s);
 
 	//---------------------------------------------------------------------
 	//  Grammar checks
@@ -212,7 +212,7 @@ public:
 
 	//------------- check if resolvers are legal  --------------------
 
-	void ResErr(Node *p, const wchar_t* msg);
+	void ResErr(Node *p, const char* msg);
 	void CheckRes(Node *p, bool rslvAllowed);
 	void CheckResolvers();
 
@@ -235,8 +235,8 @@ public:
 	//---------------------------------------------------------------------
 
 	void XRef();
-	void SetDDT(const wchar_t* s);
-	void SetOption(const wchar_t* s);
+	void SetDDT(const char* s);
+	void SetOption(const char* s);
 
 };
 

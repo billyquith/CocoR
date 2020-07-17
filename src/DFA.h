@@ -72,8 +72,8 @@ public:
 	Comment *firstComment;	// list of comments
 
 	//---------- Output primitives
-	wchar_t* Ch(wchar_t ch);
-	wchar_t* ChCond(wchar_t ch);
+	char* Ch(char ch);
+	char* ChCond(char ch);
 	void  PutRange(CharSet *s);
 
 	//---------- State handling
@@ -88,7 +88,7 @@ public:
 	void FindTrans (Node *p, bool start, BitArray *marked);
 	void ConvertToStates(Node *p, Symbol *sym);
 	// match string against current automaton; store it either as a fixedToken or as a litToken
-	void MatchLiteral(wchar_t* s, Symbol *sym);
+	void MatchLiteral(char* s, Symbol *sym);
 	void SplitActions(State *state, Action *a, Action *b);
 	bool Overlap(Action *a, Action *b);
 	bool MakeUnique(State *state); // return true if actions were split
@@ -99,7 +99,7 @@ public:
 	void CheckLabels();
 
 	//---------------------------- actions --------------------------------
-	Action* FindAction(State *state, wchar_t ch);
+	Action* FindAction(State *state, char ch);
 	void GetTargetStates(Action *a, BitArray* &targets, Symbol* &endOf, bool &ctx);
 
 	//------------------------- melted states ------------------------------
@@ -108,21 +108,21 @@ public:
 	Melted* StateWithSet(BitArray *s);
 
 	//------------------------ comments --------------------------------
-	wchar_t* CommentStr(Node *p);
+	char* CommentStr(Node *p);
 	void NewComment(Node *from, Node *to, bool nested);
 
 	//------------------------ scanner generation ----------------------
 	void GenComBody(Comment *com);
 	void GenCommentHeader(Comment *com, int i);
 	void GenComment(Comment *com, int i);
-	void CopyFramePart(const wchar_t* stop);
-	wchar_t* SymName(Symbol *sym); // real name value is stored in Tab.literals
+	void CopyFramePart(const char* stop);
+	char* SymName(Symbol *sym); // real name value is stored in Tab.literals
 	void GenLiterals ();
-	int GenNamespaceOpen(const wchar_t* nsName);
+	int GenNamespaceOpen(const char* nsName);
 	void GenNamespaceClose(int nrOfNs);
 	void WriteState(State *state);
 	void WriteStartTab();
-	void OpenGen(const wchar_t* genName, bool backUp); /* pdt */
+	void OpenGen(const char* genName, bool backUp); /* pdt */
 	void WriteScanner();
 	DFA(Parser *parser);
 };

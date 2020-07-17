@@ -44,7 +44,6 @@ public:
 	void Set(const int index, const bool value);
 	void SetAll(const bool value);
 	bool Equal(const BitArray *right ) const;
-	bool Overlaps(const BitArray *right ) const;
 	bool operator[](const int index) const { return Get(index); };
 
 	const BitArray &operator=(const BitArray &right);

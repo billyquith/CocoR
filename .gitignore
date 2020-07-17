@@ -1,3 +1,16 @@
 
+*.old
+TestRes*
+
 src/*.exe
 *.zip
+
+*.vcxproj.user
+*.obj
+*.tlog
+*.ilk
+*.db
+*.opendb
+*.pdb
+*.idb
+*.log

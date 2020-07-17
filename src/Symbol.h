@@ -47,7 +47,8 @@ public:
 
 	int      n;           // symbol number
 	int      typ;         // t, nt, pr, unknown, rslv /* ML 29_11_2002 slv added */ /* AW slv --> rslv */
-	wchar_t  *name;       // symbol name
+	char	 *name;       // symbol name
+	char	 *enumName;	  // "safe" symbol name to use in code
 	Node     *graph;      // nt: to first node of syntax graph
 	int      tokenKind;   // t:  token kind (fixedToken, classToken, ...)
 	bool     deletable;   // nt: true if nonterminal is deletable
@@ -61,7 +62,7 @@ public:
 	                      // nt: pos of local declarations in source text (or null)
 
 
-	Symbol(int typ, const wchar_t* name, int line);
+	Symbol(int typ, const char* name, int line);
 	virtual ~Symbol();
 };
 

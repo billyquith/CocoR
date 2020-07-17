@@ -9,17 +9,17 @@ class StringBuilder
 {
 public:
 	StringBuilder(int capacity = 32);
-	StringBuilder(const wchar_t *val);
+	StringBuilder(const char *val);
 	
 	virtual ~StringBuilder();
-	void Append(const wchar_t val);
-	void Append(const wchar_t *val);
-	wchar_t* ToString();
+	void Append(const char val);
+	void Append(const char *val);
+	char* ToString();
 	int GetLength() { return length; };
 
 private:
 	void Init(int capacity);
-	wchar_t *data;
+	char *data;
 	int capacity;
 	int length;
 };

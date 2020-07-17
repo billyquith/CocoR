@@ -124,22 +124,10 @@ bool BitArray::Equal(const BitArray *right) const
 	if (Count != right->Count) {
 		return false;
 	}
-	for(int index = 0; index < Count; index++) {
-		if (Get(index) != right->Get(index)) {
+	for(int i = 0; i < Count; i++)
+		if ((Data[(i>>3)] & (1<<(i&7))) != (right->Data[(i>>3)] & (1<<(i&7))))
 			return false;
-		}
-	}
 	return true;
-}
-
-bool BitArray::Overlaps(const BitArray *right) const
-{
-	for (int index = 0; index < Count; ++index) {
-		if (Get(index) && right->Get(index)) {
-			return true;
-		}
-	}
-	return false;
 }
 
 const BitArray &BitArray::operator=(const BitArray &right)

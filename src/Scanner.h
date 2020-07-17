@@ -27,14 +27,13 @@ Coco/R itself) does not fall under the GNU General Public License.
 -----------------------------------------------------------------------*/
 
 
-#if !defined(Coco_COCO_SCANNER_H__)
-#define Coco_COCO_SCANNER_H__
+#if !defined(COCO_SCANNER_H)
+#define COCO_SCANNER_H
 
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <wchar.h>
 
 // io.h and fcntl are used to ensure binary read from streams on windows
 #if _MSC_VER >= 1300
@@ -43,51 +42,46 @@ Coco/R itself) does not fall under the GNU General Public License.
 #endif
 
 #if _MSC_VER >= 1400
-#define coco_swprintf swprintf_s
+#	define coco_sprintf sprintf_s
 #elif _MSC_VER >= 1300
-#define coco_swprintf _snwprintf
+#	define coco_sprintf _snprintf
 #elif defined __MINGW32__
-#define coco_swprintf _snwprintf
+#	define coco_sprintf _snprintf
 #else
-// assume every other compiler knows swprintf
-#define coco_swprintf swprintf
+	// assume every other compiler knows sprintf
+#	define coco_sprintf sprintf
 #endif
+#define coco_printf printf
 
 #define COCO_WCHAR_MAX 65535
-#define COCO_MIN_BUFFER_LENGTH 1024
-#define COCO_MAX_BUFFER_LENGTH (64*COCO_MIN_BUFFER_LENGTH)
-#define COCO_HEAP_BLOCK_SIZE (64*1024)
-#define COCO_CPP_NAMESPACE_SEPARATOR L':'
+#define MIN_BUFFER_LENGTH 1024
+#define MAX_BUFFER_LENGTH (64*MIN_BUFFER_LENGTH)
+#define HEAP_BLOCK_SIZE (64*1024)
+#define COCO_CPP_NAMESPACE_SEPARATOR ':'
+
+// string handling, wide character
+char* coco_string_create(const char *value);
+char* coco_string_create(const char *value, int startIndex);
+char* coco_string_create(const char *value, int startIndex, int length);
+char* coco_string_create_upper(const char* data);
+char* coco_string_create_lower(const char* data);
+char* coco_string_create_lower(const char* data, int startIndex, int dataLen);
+char* coco_string_create_append(const char* data1, const char* data2);
+char* coco_string_create_append(const char* data, const char value);
+void  coco_string_delete(char* &data);
+int   coco_string_length(const char* data);
+bool  coco_string_endswith(const char* data, const char *value);
+int   coco_string_indexof(const char* data, const char value);
+int   coco_string_lastindexof(const char* data, const char value);
+void  coco_string_merge(char* &data, const char* value);
+bool  coco_string_equal(const char* data1, const char* data2);
+int   coco_string_compareto(const char* data1, const char* data2);
+int   coco_string_hash(const char* data);
 
 namespace Coco {
 
 
-// string handling, wide character
-wchar_t* coco_string_create(const wchar_t *value);
-wchar_t* coco_string_create(const wchar_t *value, int startIndex);
-wchar_t* coco_string_create(const wchar_t *value, int startIndex, int length);
-wchar_t* coco_string_create_upper(const wchar_t* data);
-wchar_t* coco_string_create_lower(const wchar_t* data);
-wchar_t* coco_string_create_lower(const wchar_t* data, int startIndex, int dataLen);
-wchar_t* coco_string_create_append(const wchar_t* data1, const wchar_t* data2);
-wchar_t* coco_string_create_append(const wchar_t* data, const wchar_t value);
-void  coco_string_delete(wchar_t* &data);
-int   coco_string_length(const wchar_t* data);
-bool  coco_string_endswith(const wchar_t* data, const wchar_t *value);
-int   coco_string_indexof(const wchar_t* data, const wchar_t value);
-int   coco_string_lastindexof(const wchar_t* data, const wchar_t value);
-void  coco_string_merge(wchar_t* &data, const wchar_t* value);
-bool  coco_string_equal(const wchar_t* data1, const wchar_t* data2);
-int   coco_string_compareto(const wchar_t* data1, const wchar_t* data2);
-unsigned int coco_string_hash(const wchar_t* data);
-
-// string handling, ascii character
-wchar_t* coco_string_create(const char *value);
-char* coco_string_create_char(const wchar_t *value);
-void  coco_string_delete(char* &data);
-
-
-class Token  
+class Token
 {
 public:
 	int kind;     // token kind
@@ -95,7 +89,7 @@ public:
 	int charPos;  // token position in characters in the source text (starting at 0)
 	int col;      // token column (starting at 1)
 	int line;     // token line (starting at 1)
-	wchar_t* val; // token value
+	char* val; // token value
 	Token *next;  // ML 2005-03-11 Peek tokens are kept in linked list
 
 	Token();
@@ -117,10 +111,10 @@ private:
 	int bufPos;         // current position in buffer
 	FILE* stream;       // input stream (seekable)
 	bool isUserStream;  // was the stream opened by the user?
-	
+
 	int ReadNextStreamChunk();
 	bool CanSeek();     // true if stream can be seeked otherwise false
-	
+
 public:
 	static const int EoF = COCO_WCHAR_MAX + 1;
 
@@ -128,11 +122,11 @@ public:
 	Buffer(const unsigned char* buf, int len);
 	Buffer(Buffer *b);
 	virtual ~Buffer();
-	
+
 	virtual void Close();
 	virtual int Read();
 	virtual int Peek();
-	virtual wchar_t* GetString(int beg, int end);
+	virtual char* GetString(int beg, int end);
 	virtual int GetPos();
 	virtual void SetPos(int value);
 };
@@ -191,10 +185,10 @@ class KeywordMap {
 private:
 	class Elem {
 	public:
-		wchar_t *key;
+		char *key;
 		int val;
 		Elem *next;
-		Elem(const wchar_t *key, int val) { this->key = coco_string_create(key); this->val = val; next = NULL; }
+		Elem(const char *key, int val) { this->key = coco_string_create(key); this->val = val; next = NULL; }
 		virtual ~Elem() { coco_string_delete(key); }
 	};
 
@@ -214,13 +208,13 @@ public:
 		delete [] tab;
 	}
 
-	void set(const wchar_t *key, int val) {
+	void set(const char *key, int val) {
 		Elem *e = new Elem(key, val);
 		int k = coco_string_hash(key) % 128;
 		e->next = tab[k]; tab[k] = e;
 	}
 
-	int get(const wchar_t *key, int defaultVal) {
+	int get(const char *key, int defaultVal) {
 		Elem *e = tab[coco_string_hash(key) % 128];
 		while (e != NULL && !coco_string_equal(e->key, key)) e = e->next;
 		return e == NULL ? defaultVal : e->val;
@@ -239,11 +233,12 @@ private:
 	int noSym;
 	int maxT;
 	int charSetSize;
+	unsigned int tabsize;
 	StartStates start;
 	KeywordMap keywords;
 
 	Token *t;         // current token
-	wchar_t *tval;    // text of current token
+	char *tval;       // text of current token
 	int tvalLength;   // length of text of current token
 	int tlen;         // length of current token
 
@@ -273,9 +268,9 @@ private:
 
 public:
 	Buffer *buffer;   // scanner buffer
-	
+
 	Scanner(const unsigned char* buf, int len);
-	Scanner(const wchar_t* fileName);
+	Scanner(const char* fileName);
 	Scanner(FILE* s);
 	~Scanner();
 	Token* Scan();
@@ -287,5 +282,5 @@ public:
 } // namespace
 
 
-#endif
+#endif // -->prefix COCO_SCANNER_H
 

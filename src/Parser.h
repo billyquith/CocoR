@@ -27,8 +27,8 @@ Coco/R itself) does not fall under the GNU General Public License.
 -----------------------------------------------------------------------*/
 
 
-#if !defined(Coco_COCO_PARSER_H__)
-#define Coco_COCO_PARSER_H__
+#if !defined(COCO_PARSER_H)
+#define COCO_PARSER_H
 
 #include "Tab.h"
 #include "DFA.h"
@@ -46,10 +46,10 @@ public:
 
 	Errors();
 	void SynErr(int line, int col, int n);
-	void Error(int line, int col, const wchar_t *s);
-	void Warning(int line, int col, const wchar_t *s);
-	void Warning(const wchar_t *s);
-	void Exception(const wchar_t *s);
+	void Error(int line, int col, const char *s);
+	void Warning(int line, int col, const char *s);
+	void Warning(const char *s);
+	void Exception(const char *s);
 
 }; // Errors
 
@@ -62,6 +62,42 @@ private:
 		_string=3,
 		_badString=4,
 		_char=5,
+		// "COMPILER"=6,
+		// "IGNORECASE"=7,
+		// "CHARACTERS"=8,
+		// "TOKENS"=9,
+		// "PRAGMAS"=10,
+		// "COMMENTS"=11,
+		// "FROM"=12,
+		// "TO"=13,
+		// "NESTED"=14,
+		// "IGNORE"=15,
+		// "PRODUCTIONS"=16,
+		// "="=17,
+		// "."=18,
+		// "END"=19,
+		// "+"=20,
+		// "-"=21,
+		// ".."=22,
+		// "ANY"=23,
+		// "<"=24,
+		// ">"=25,
+		// "<."=26,
+		// ".>"=27,
+		// "|"=28,
+		// "WEAK"=29,
+		// "("=30,
+		// ")"=31,
+		// "["=32,
+		// "]"=33,
+		// "{"=34,
+		// "}"=35,
+		// "SYNC"=36,
+		// "IF"=37,
+		// "CONTEXT"=38,
+		// "(."=39,
+		// ".)"=40,
+		// ???=41,
 		_ddtSym=42,
 		_optionSym=43
 	};
@@ -86,42 +122,31 @@ public:
 	Token *la;			// lookahead token
 
 int id;
-	int str;
+int str;
 
-	FILE* trace;		// other Coco objects referenced in this ATG
-	Tab *tab;
-	DFA *dfa;
-	ParserGen *pgen;
+FILE* trace;		// other Coco objects referenced in this ATG
+Tab *tab;
+DFA *dfa;
+ParserGen *pgen;
 
-	bool genScanner;
-	wchar_t* tokenString;  // used in declarations of literal tokens
-	wchar_t* noString;     // used in declarations of literal tokens
+bool genScanner;
+char* tokenString;  // used in declarations of literal tokens
+char* noString;     // used in declarations of literal tokens
 
-	// This method will be called by the contructor if it exits.
-	// This support is specific to the C++ version of Coco/R.
-	void Init() {
-		tab = NULL;
-		dfa = NULL;
-		pgen = NULL;
-		id  = 0;
-		str = 1;
-		tokenString = NULL;
-		noString = coco_string_create(L"-none-");
-	}
+void InitDeclarations() {
+	id  = 0;
+	str = 1;
+	tokenString = NULL;
+	noString = coco_string_create("-none-");
+}
 
-	// Uncomment this method if cleanup is necessary,
-	// this method will be called by the destructor if it exists.
-	// This support is specific to the C++ version of Coco/R.
-	// void Destroy() {
-		// nothing to do
-	// }
 /*-------------------------------------------------------------------------*/
 
 
 
 	Parser(Scanner *scanner);
 	~Parser();
-	void SemErr(const wchar_t* msg);
+	void SemErr(const char* msg);
 
 	void Coco();
 	void SetDecl();
@@ -133,7 +158,7 @@ int id;
 	void Expression(Graph* &g);
 	void SimSet(CharSet* &s);
 	void Char(int &n);
-	void Sym(wchar_t* &name, int &kind);
+	void Sym(char* &name, int &kind);
 	void Term(Graph* &g);
 	void Resolver(Position* &pos);
 	void Factor(Graph* &g);
@@ -149,5 +174,5 @@ int id;
 } // namespace
 
 
-#endif
+#endif // -->prefix_COCO_PARSER_H
 

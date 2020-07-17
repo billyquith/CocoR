@@ -36,10 +36,10 @@ namespace Coco {
 class CharClass {
 public:
 	int n;          // class number
-	wchar_t* name;  // class name
+	char* name;  	// class name
 	CharSet *set;   // set representing the class
 
-	CharClass(const wchar_t* name, CharSet *s);
+	CharClass(const char* name, CharSet *s);
 	virtual ~CharClass();
 };
 

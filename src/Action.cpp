@@ -73,7 +73,7 @@ void Action::ShiftWith(CharSet *s, Tab *tab) {
 		typ = Node::chr; sym = s->First();
 	} else {
 		CharClass *c = tab->FindCharClass(s);
-		if (c == NULL) c = tab->NewCharClass(L"#", s); // class with dummy name
+		if (c == NULL) c = tab->NewCharClass("#", s); // class with dummy name
 		typ = Node::clas; sym = c->n;
 	}
 }
